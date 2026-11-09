@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="hu" class="scroll-smooth">
+<head>
+  <!-- =========================================================
+       LÁTSZERÉSZ BÉLA MIKLÓS – OPTIKA, BAJA
+       Egyoldalas weboldal (HTML + Tailwind CSS CDN + vanilla JS)
+
+       GYORS SZERKESZTÉSI ÚTMUTATÓ
+       - Minden szöveg a <body>-ban található, szekciónként
+         "SZEKCIÓ:" kezdetű kommentekkel jelölve.
+       - Elérhetőségek (cím, telefon, e-mail) több helyen is
+         szerepelnek: keress rá a "SZERKESZTHETŐ" szóra.
+       - Nyitvatartás: a HTML táblázatban ÉS a lap alján lévő
+         JavaScript "OPENING_HOURS" objektumában is írd át
+         (a JS számolja ki a "Most nyitva / Zárva" jelzést).
+       - Színek és betűtípusok: a tailwind.config blokkban.
+       ========================================================= -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO: oldal címe és leírása (SZERKESZTHETŐ) -->
+  <title>Látszerész Béla Miklós – Optika Baján | Szemüvegkészítés, ingyenes látásvizsgálat</title>
+  <meta name="description" content="Optika Baja belvárosában: szemüvegkészítés, szemüveg javítás, karbantartás, kontaktlencse illesztés és ingyenes látásvizsgálat időpont-egyeztetéssel. 30 év tapasztalat." />
+  <meta name="theme-color" content="#1A120B" />
+
+  <!-- Open Graph (megosztáskor megjelenő előnézet) -->
+  <meta property="og:title" content="Látszerész Béla Miklós – Optika, Baja" />
+  <meta property="og:description" content="Prémium látásgondozás és szemüvegkészítés. Ingyenes látásvizsgálat időpont-egyeztetéssel." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://latszereszbelamiklos.hu/" />
+
+  <!-- Favicon: arany szemüveg-ikon (inline SVG, nincs szükség külön fájlra) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 48'%3E%3Crect width='120' height='48' rx='8' fill='%231A120B'/%3E%3Cpath d='M8 9h34v15c0 9-6 15-15 15h-4c-9 0-15-6-15-15zM112 9H78v15c0 9 6 15 15 15h4c9 0 15-6 15-15zM42 9l18 18 18-18' fill='none' stroke='%23C5A059' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <!-- Google Fonts: Montserrat (címsorok, logó) + Inter (folyószöveg) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    /* ARCULAT: színek és betűtípusok egy helyen (SZERKESZTHETŐ) */
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wood: {
+              950: '#120C07', // legsötétebb háttér (lábléc)
+              900: '#1A120B', // fő háttér – sötét fa
+              800: '#231B15', // kártyák, váltakozó szekciók
+              700: '#2E241C', // keretek, elválasztók
+              600: '#3D3026',
+            },
+            gold: {
+              300: '#E8CF8F', // világos arany (gradiens csúcsfény)
+              400: '#D4B472',
+              500: '#C5A059', // fő arany kiemelőszín
+              600: '#A8843F',
+              700: '#7D6230',
+            },
+            ivory: {
+              100: '#F4EFE6', // törtfehér folyószöveg
+              300: '#CFC6B8', // halványabb másodlagos szöveg
+              500: '#9C9285', // apró, kevésbé fontos szöveg
+            },
+          },
+          fontFamily: {
+            display: ['Montserrat', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          letterSpacing: {
+            logo: '0.42em',
+            wide2: '0.22em',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ---------- Alapbeállítások ---------- */
+    html { scroll-padding-top: 88px; } /* a ragadós fejléc ne takarja ki a szekciócímeket */
+    body { -webkit-font-smoothing: antialiased; }
+    ::selection { background: #C5A059; color: #1A120B; }
+
+    /* Arany, enyhén fémes szövegszín (logó-hatás) */
+    .text-gold-metal {
+      background: linear-gradient(180deg, #F1DDA4 0%, #C5A059 48%, #9C7A3C 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .bg-gold-metal { background: linear-gradient(135deg, #E8CF8F 0%, #C5A059 45%, #A8843F 100%); }
+
+    /* Sötét fa-erezet textúra – kép nélkül, SVG zajszűrővel generálva.
+       Ha saját fotót szeretnél a nyitóképhez, lásd a HERO szekció kommentjét. */
+    .wood-texture {
+      background-color: #1A120B;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2400' height='800'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0035 0.11' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.25 0 0 0 0 0.16 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E"),
+        linear-gradient(180deg, #221810 0%, #1A120B 100%);
+      background-size: 2400px 800px, cover;
+    }
+
+    /* Vékony arany elválasztó vonal – a kirakat díszítőelemei alapján */
+    .gold-rule { width: 56px; height: 1px; background: linear-gradient(90deg, transparent, #C5A059, transparent); }
+
+    /* Fejléc háttér görgetéskor */
+    #site-header.scrolled { background: rgba(26, 18, 11, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-color: rgba(197, 160, 89, 0.18); }
+
+    /* Mobil menü animáció */
+    #mobile-menu { transition: opacity .3s ease, visibility .3s ease; }
+    #mobile-menu.open { opacity: 1; visibility: visible; }
+    .burger span { transition: transform .3s ease, opacity .2s ease; }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Finom beúszó animáció görgetéskor (JS kapcsolja be; JS nélkül minden látszik) */
+    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s ease; }
+    .js .reveal.visible { opacity: 1; transform: none; }
+
+    /* Térkép sötétítése, hogy illeszkedjen az arculathoz */
+    .map-dark { filter: grayscale(1) invert(0.92) sepia(0.25) contrast(0.9) brightness(0.95); }
+
+    /* Mozgáscsökkentés tiszteletben tartása */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+
+  <!-- Strukturált adatok a Google számára (SZERKESZTHETŐ: cím, telefon, nyitvatartás) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Optician",
+    "name": "Látszerész Béla Miklós – Optika",
+    "url": "https://latszereszbelamiklos.hu/",
+    "email": "latszeresz.baja@gmail.com",
+    "telephone": ["+36 78 888 045", "+36 30 173 8045"],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Déri Frigyes sétány 2/A",
+      "addressLocality": "Baja",
+      "postalCode": "6500",
+      "addressCountry": "HU"
+    },
+    "geo": { "@type": "GeoCoordinates", "latitude": 46.1811158, "longitude": 18.9533817 },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "08:00", "closes": "17:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:00", "closes": "11:00" }
+    ],
+    "sameAs": ["https://www.facebook.com/latszereszbelamiklos"]
+  }
+  </script>
+</head>
+
+<body class="bg-wood-900 text-ivory-100 font-sans font-light leading-relaxed">
+
+  <!-- Ugrólink billentyűzetes navigációhoz (akadálymentesség) -->
+  <a href="#fooldal" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-gold-500 focus:text-wood-900 focus:px-4 focus:py-2 focus:rounded">Ugrás a tartalomra</a>
+
+  <!-- =========================================================
+       SZEKCIÓ: FEJLÉC ÉS NAVIGÁCIÓ (ragadós / sticky)
+       ========================================================= -->
+  <header id="site-header" class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors duration-300">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
+
+      <!-- Logó: szemüveg-jel + LÁTSZERÉSZ / BÉLA MIKLÓS
+           Tipp: ha megvan az eredeti logó fájl, az <svg> helyére tehetsz egy <img src="logo.svg"> elemet. -->
+      <a href="#fooldal" class="group flex items-center gap-3" aria-label="Látszerész Béla Miklós – vissza az oldal tetejére">
+        <svg class="h-7 w-auto shrink-0" viewBox="0 0 120 48" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="g-logo" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#F1DDA4" /><stop offset=".5" stop-color="#C5A059" /><stop offset="1" stop-color="#9C7A3C" />
+            </linearGradient>
+          </defs>
+          <path d="M8 9h34v15c0 9-6 15-15 15h-4c-9 0-15-6-15-15zM112 9H78v15c0 9 6 15 15 15h4c9 0 15-6 15-15zM42 9l18 18 18-18" stroke="url(#g-logo)" stroke-width="5" stroke-linejoin="round" />
+        </svg>
+        <span class="flex flex-col leading-none">
+          <span class="font-display text-[13px] font-semibold tracking-logo text-gold-metal sm:text-[15px]">LÁTSZERÉSZ</span>
+          <span class="mt-1.5 flex items-center gap-2 font-display text-[9px] font-medium tracking-wide2 text-gold-500 sm:text-[10px]">
+            <span class="h-px w-4 bg-gold-600"></span>BÉLA MIKLÓS<span class="h-px w-4 bg-gold-600"></span>
+          </span>
+        </span>
+      </a>
+
+      <!-- Asztali menü -->
+      <nav class="hidden items-center gap-9 lg:flex" aria-label="Fő navigáció">
+        <a href="#rolunk" class="nav-link font-display text-[12px] font-medium uppercase tracking-wide2 text-ivory-300 transition-colors hover:text-gold-400">Rólunk</a>
+        <a href="#szolgaltatasok" class="nav-link font-display text-[12px] font-medium uppercase tracking-wide2 text-ivory-300 transition-colors hover:text-gold-400">Szolgáltatások</a>
+        <a href="#latasvizsgalat" class="nav-link font-display text-[12px] font-medium uppercase tracking-wide2 text-ivory-300 transition-colors hover:text-gold-400">Látásvizsgálat</a>
+        <a href="#kapcsolat" class="nav-link font-display text-[12px] font-medium uppercase tracking-wide2 text-ivory-300 transition-colors hover:text-gold-400">Kapcsolat</a>
+        <!-- SZERKESZTHETŐ: telefonszám a fejlécben -->
+        <a href="tel:+36301738045" class="inline-flex items-center gap-2 rounded-full border border-gold-500/60 px-5 py-2.5 font-display text-[12px] font-semibold tracking-wider text-gold-400 transition hover:bg-gold-500 hover:text-wood-900">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+          06 30/173 8045
+        </a>
+      </nav>
+
+      <!-- Hamburger gomb (mobil) -->
+      <button id="menu-toggle" class="burger relative z-[60] flex h-11 w-11 flex-col items-center justify-center gap-[5px] lg:hidden" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="block h-[2px] w-6 bg-gold-400"></span>
+        <span class="block h-[2px] w-6 bg-gold-400"></span>
+        <span class="block h-[2px] w-6 bg-gold-400"></span>
+      </button>
+    </div>
+
+    <!-- Mobil menü (teljes képernyős panel) -->
+    <div id="mobile-menu" class="invisible fixed inset-0 z-50 flex flex-col items-center justify-center bg-wood-900/[.98] opacity-0 lg:hidden">
+      <nav class="flex flex-col items-center gap-8" aria-label="Mobil navigáció">
+        <a href="#rolunk" class="mobile-link font-display text-lg font-medium uppercase tracking-wide2 text-ivory-100">Rólunk</a>
+        <a href="#szolgaltatasok" class="mobile-link font-display text-lg font-medium uppercase tracking-wide2 text-ivory-100">Szolgáltatások</a>
+        <a href="#latasvizsgalat" class="mobile-link font-display text-lg font-medium uppercase tracking-wide2 text-ivory-100">Látásvizsgálat</a>
+        <a href="#kapcsolat" class="mobile-link font-display text-lg font-medium uppercase tracking-wide2 text-ivory-100">Kapcsolat</a>
+        <div class="gold-rule my-2"></div>
+        <a href="tel:+36301738045" class="mobile-link font-display text-base font-semibold tracking-wider text-gold-400">06 30/173 8045</a>
+        <a href="tel:+3678888045" class="mobile-link font-display text-base font-semibold tracking-wider text-gold-400">06 78/888 045</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =========================================================
+         SZEKCIÓ: HERO / NYITÓKÉPERNYŐ
+         Saját fotó használata: a "wood-texture" osztályú div-nek adj
+         style="background-image:url('kepek/nyitokep.jpg');background-size:cover;background-position:center"
+         attribútumot – a sötét átfedés (overlay) automatikusan rajta marad.
+         ========================================================= -->
+    <section id="fooldal" class="relative flex min-h-[100svh] items-center overflow-hidden">
+      <!-- Háttér: fa-textúra -->
+      <div class="wood-texture absolute inset-0" aria-hidden="true"></div>
+      <!-- Sötét, elegáns átfedés + arany fényfolt -->
+      <div class="absolute inset-0 bg-gradient-to-b from-wood-900/70 via-wood-900/40 to-wood-900" aria-hidden="true"></div>
+      <div class="absolute left-1/2 top-[38%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500/[.07] blur-3xl" aria-hidden="true"></div>
+      <!-- Függőleges arany keretvonalak – a logótábla mintájára -->
+      <div class="absolute inset-y-[22%] left-6 hidden w-px bg-gradient-to-b from-transparent via-gold-500/50 to-transparent md:block lg:left-12" aria-hidden="true"></div>
+      <div class="absolute inset-y-[22%] right-6 hidden w-px bg-gradient-to-b from-transparent via-gold-500/50 to-transparent md:block lg:right-12" aria-hidden="true"></div>
+
+      <div class="relative mx-auto w-full max-w-5xl px-6 pb-20 pt-32 text-center sm:px-8">
+        <!-- Nagy logójel -->
+        <svg class="reveal mx-auto mb-8 h-14 w-auto sm:h-16" viewBox="0 0 120 48" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="g-hero" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#F1DDA4" /><stop offset=".5" stop-color="#C5A059" /><stop offset="1" stop-color="#9C7A3C" />
+            </linearGradient>
+          </defs>
+          <path d="M8 9h34v15c0 9-6 15-15 15h-4c-9 0-15-6-15-15zM112 9H78v15c0 9 6 15 15 15h4c9 0 15-6 15-15zM42 9l18 18 18-18" stroke="url(#g-hero)" stroke-width="5" stroke-linejoin="round" />
+        </svg>
+
+        <p class="reveal mb-6 font-display text-[11px] font-medium uppercase tracking-[0.38em] text-gold-500 sm:text-xs">Optika · Baja · 30 év tapasztalat</p>
+
+        <!-- Fő üzenet (SZERKESZTHETŐ) -->
+        <h1 class="reveal font-display text-[1.45rem] font-semibold uppercase leading-[1.2] tracking-[0.05em] min-[400px]:text-[1.7rem] text-ivory-100 sm:text-5xl md:text-6xl">
+          Prémium látásgondozás<br class="hidden sm:block" />
+          <span class="text-gold-metal"> és szemüvegkészítés.</span>
+        </h1>
+
+        <div class="reveal gold-rule mx-auto my-8"></div>
+
+        <p class="reveal mx-auto max-w-2xl text-base text-ivory-300 sm:text-lg">
+          Nálunk minden nap arról szól, hogy Ön jól lásson! A világ vezető szemüveglencséi és kontaktlencséi, személyre szabott tanácsadás és gondos kivitelezés – Baja belvárosában.
+        </p>
+
+        <!-- CTA gombok -->
+        <div class="reveal mt-11 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a href="#latasvizsgalat" class="bg-gold-metal inline-flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 font-display text-[13px] font-semibold uppercase tracking-[0.14em] text-wood-900 shadow-[0_10px_40px_-10px_rgba(197,160,89,.55)] transition hover:brightness-110 sm:w-auto">
+            Időpontfoglalás látásvizsgálatra
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#szolgaltatasok" class="inline-flex w-full items-center justify-center rounded-full border border-ivory-100/20 px-8 py-4 font-display text-[13px] font-medium uppercase tracking-[0.14em] text-ivory-100 transition hover:border-gold-500 hover:text-gold-400 sm:w-auto">
+            Szolgáltatásaink
+          </a>
+        </div>
+      </div>
+
+      <!-- Görgetésre ösztönző jel -->
+      <a href="#rolunk" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-ivory-500 transition hover:text-gold-400 sm:flex" aria-label="Görgetés lefelé">
+        <span class="font-display text-[10px] uppercase tracking-[0.3em]">Görgessen</span>
+        <span class="h-10 w-px animate-pulse bg-gradient-to-b from-gold-500 to-transparent"></span>
+      </a>
+    </section>
+
+
+    <!-- =========================================================
+         SZEKCIÓ: RÓLUNK
+         Szövegek a régi weboldalról átemelve (SZERKESZTHETŐ)
+         ========================================================= -->
+    <section id="rolunk" class="relative py-24 sm:py-32">
+      <div class="mx-auto grid max-w-6xl items-center gap-16 px-6 sm:px-8 lg:grid-cols-12">
+
+        <!-- Kiemelt szám -->
+        <div class="reveal lg:col-span-5">
+          <div class="relative mx-auto aspect-square max-w-sm rounded-sm border border-gold-500/25 p-3">
+            <div class="wood-texture flex h-full w-full flex-col items-center justify-center rounded-sm border border-gold-500/15 text-center">
+              <span class="font-display text-[7rem] font-semibold leading-none text-gold-metal sm:text-[8.5rem]">30</span>
+              <span class="mt-2 font-display text-xs font-medium uppercase tracking-[0.4em] text-gold-400">év tapasztalat</span>
+              <div class="gold-rule my-6"></div>
+              <span class="px-8 font-display text-[10px] uppercase tracking-[0.3em] text-ivory-500">Szemüvegkészítés · Javítás<br />Kontaktlencse illesztés</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bemutatkozó szöveg -->
+        <div class="lg:col-span-7">
+          <p class="reveal mb-4 font-display text-[11px] font-medium uppercase tracking-[0.38em] text-gold-500">Rólunk</p>
+          <h2 class="reveal font-display text-3xl font-semibold uppercase leading-tight tracking-[0.06em] sm:text-4xl">
+            Nálunk minden nap arról szól, <span class="text-gold-metal">hogy Ön jól lásson!</span>
+          </h2>
+          <div class="reveal gold-rule my-8"></div>
+          <div class="reveal space-y-5 text-ivory-300">
+            <p>
+              Három évtizede foglalkozunk látásgondozással és szemüvegkészítéssel. Azért dolgozunk, hogy mindig a lehető legjobb szolgáltatást adjuk ügyfeleinknek – a látásvizsgálattól a keret kiválasztásán át a kész szemüveg átadásáig.
+            </p>
+            <p>
+              Optikánkban a világ vezető szemüveglencséi és kontaktlencséi közül választhat. Széles keretválaszték, napszemüvegek, kontaktlencse-ápolószerek és kiegészítők várják – személyre szabott kedvezményekkel és akciókkal.
+            </p>
+            <p class="font-display text-sm font-medium uppercase tracking-[0.2em] text-gold-400">Keressen minket bizalommal!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SZEKCIÓ: SZOLGÁLTATÁSOK (kártyák) + TERMÉKEK / MÁRKÁK
+         ========================================================= -->
+    <section id="szolgaltatasok" class="relative border-y border-wood-700 bg-wood-800 py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 sm:px-8">
+
+        <div class="mx-auto mb-16 max-w-2xl text-center">
+          <p class="reveal mb-4 font-display text-[11px] font-medium uppercase tracking-[0.38em] text-gold-500">Szolgáltatások</p>
+          <h2 class="reveal font-display text-3xl font-semibold uppercase tracking-[0.06em] sm:text-4xl">Minden, ami <span class="text-gold-metal">szemüveg</span></h2>
+          <div class="reveal gold-rule mx-auto mt-8"></div>
+        </div>
+
+        <!-- Szolgáltatás-kártyák (SZERKESZTHETŐ: cím + leírás kártyánként) -->
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+          <!-- 1. kártya: Szemüvegkészítés -->
+          <article class="reveal group rounded-sm border border-wood-700 bg-wood-900/60 p-8 transition duration-500 hover:-translate-y-1 hover:border-gold-500/50">
+            <div class="mb-7 flex h-14 w-14 items-center justify-center rounded-full border border-gold-500/40 text-gold-400 transition group-hover:bg-gold-500 group-hover:text-wood-900">
+              <!-- ikon: szemüveg -->
+              <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="14" r="3.5"/><circle cx="17.5" cy="14" r="3.5"/><path d="M10 14c.6-.8 1.3-1.2 2-1.2s1.4.4 2 1.2M3 14 4.5 7.5A1.5 1.5 0 0 1 6 6.5M21 14l-1.5-6.5A1.5 1.5 0 0 0 18 6.5"/></svg>
+            </div>
+            <h3 class="mb-3 font-display text-sm font-semibold uppercase tracking-[0.18em] text-ivory-100">Szemüvegkészítés</h3>
+            <p class="text-[15px] text-ivory-500">Egyedi szemüvegek a látásvizsgálat eredménye alapján, prémium lencsékkel és az arcához illő kerettel.</p>
+          </article>
+
+          <!-- 2. kártya: Szemüveg javítás -->
+          <article class="reveal group rounded-sm border border-wood-700 bg-wood-900/60 p-8 transition duration-500 hover:-translate-y-1 hover:border-gold-500/50">
+            <div class="mb-7 flex h-14 w-14 items-center justify-center rounded-full border border-gold-500/40 text-gold-400 transition group-hover:bg-gold-500 group-hover:text-wood-900">
+              <!-- ikon: csavarhúzó / javítás -->
+              <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3.5-3.5 8-8M14.7 6.3 9 12M3 21l3.5-3.5"/><path d="M14.7 6.3a4 4 0 0 1 3-3.3l1.3 1.3-2 2 1 1 2-2 1.3 1.3a4 4 0 0 1-3.3 3"/></svg>
+            </div>
+            <h3 class="mb-3 font-display text-sm font-semibold uppercase tracking-[0.18em] text-ivory-100">Szemüveg javítás</h3>
+            <p class="text-[15px] text-ivory-500">Meglazult csavar, elgörbült szár, sérült orrpárna – szemüvegét szakszerűen rendbe hozzuk.</p>
+          </article>
+
+          <!-- 3. kártya: Karbantartás -->
+          <article class="reveal group rounded-sm border border-wood-700 bg-wood-900/60 p-8 transition duration-500 hover:-translate-y-1 hover:border-gold-500/50">
+            <div class="mb-7 flex h-14 w-14 items-center justify-center rounded-full border border-gold-500/40 text-gold-400 transition group-hover:bg-gold-500 group-hover:text-wood-900">
+              <!-- ikon: csillogás / karbantartás -->
+              <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <h3 class="mb-3 font-display text-sm font-semibold uppercase tracking-[0.18em] text-ivory-100">Karbantartás</h3>
+            <p class="text-[15px] text-ivory-500">Tisztítás, beállítás és ellenőrzés, hogy szemüvege hosszú ideig kényelmes és tökéletes maradjon.</p>
+          </article>
+
+          <!-- 4. kártya: Kontaktlencse illesztés -->
+          <article class="reveal group rounded-sm border border-wood-700 bg-wood-900/60 p-8 transition duration-500 hover:-translate-y-1 hover:border-gold-500/50">
+            <div class="mb-7 flex h-14 w-14 items-center justify-center rounded-full border border-gold-500/40 text-gold-400 transition group-hover:bg-gold-500 group-hover:text-wood-900">
+              <!-- ikon: szem / kontaktlencse -->
+              <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3.2"/><path d="M8.2 8.6a5.5 5.5 0 0 1 7.6 0"/></svg>
+            </div>
+            <h3 class="mb-3 font-display text-sm font-semibold uppercase tracking-[0.18em] text-ivory-100">Kontaktlencse illesztés</h3>
+            <p class="text-[15px] text-ivory-500">Szakszerű illesztés és tanácsadás, valamint kontaktlencsék és ápolószerek széles választéka.</p>
+          </article>
+        </div>
+
+        <!-- Termékkategóriák és lencsemárkák (a régi oldal "Termékeink" menüpontjából) -->
+        <div class="reveal mt-20 border-t border-wood-700 pt-14">
+          <div class="grid items-center gap-10 lg:grid-cols-12">
+            <div class="lg:col-span-5">
+              <h3 class="font-display text-lg font-semibold uppercase tracking-[0.12em]">A világ vezető lencséi <span class="text-gold-metal">optikánkban</span></h3>
+              <ul class="mt-6 flex flex-wrap gap-2 text-[13px] text-ivory-300">
+                <li class="rounded-full border border-wood-600 px-4 py-1.5">Szemüveglencsék</li>
+                <li class="rounded-full border border-wood-600 px-4 py-1.5">Szemüvegkeretek</li>
+                <li class="rounded-full border border-wood-600 px-4 py-1.5">Napszemüvegek</li>
+                <li class="rounded-full border border-wood-600 px-4 py-1.5">Kontaktlencsék, ápolószerek</li>
+                <li class="rounded-full border border-wood-600 px-4 py-1.5">Kiegészítők</li>
+              </ul>
+            </div>
+            <!-- Partner márkák (SZERKESZTHETŐ – szöveges megjelenítés, logók nélkül) -->
+            <ul class="grid grid-cols-2 gap-px overflow-hidden rounded-sm border border-wood-700 bg-wood-700 sm:grid-cols-3 lg:col-span-7" aria-label="Partner márkák">
+              <li class="flex h-20 items-center justify-center bg-wood-800 font-display text-sm font-semibold tracking-[0.28em] text-ivory-300">ESSILOR</li>
+              <li class="flex h-20 items-center justify-center bg-wood-800 font-display text-sm font-semibold tracking-[0.28em] text-ivory-300">ZEISS</li>
+              <li class="flex h-20 items-center justify-center bg-wood-800 font-display text-sm font-semibold tracking-[0.28em] text-ivory-300">HOYA</li>
+              <li class="flex h-20 items-center justify-center bg-wood-800 font-display text-sm font-semibold tracking-[0.28em] text-ivory-300">SEIKO</li>
+              <li class="flex h-20 items-center justify-center bg-wood-800 font-display text-sm font-semibold tracking-[0.2em] text-ivory-300">COOPERVISION</li>
+              <li class="flex h-20 items-center justify-center bg-wood-800 font-display text-sm font-semibold tracking-[0.28em] text-ivory-300">OTEPHARMA</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SZEKCIÓ: INGYENES LÁTÁSVIZSGÁLAT (kiemelt blokk + időpontfoglalás)
+         ========================================================= -->
+    <section id="latasvizsgalat" class="relative overflow-hidden py-24 sm:py-32">
+      <div class="mx-auto max-w-6xl px-6 sm:px-8">
+        <div class="reveal relative overflow-hidden rounded-sm border border-gold-500/40 p-[1px]">
+          <div class="wood-texture relative px-6 py-16 text-center sm:px-14 sm:py-20">
+            <div class="absolute inset-0 bg-wood-900/60" aria-hidden="true"></div>
+            <div class="absolute -top-32 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-gold-500/10 blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative">
+              <p class="mb-5 font-display text-[11px] font-medium uppercase tracking-[0.38em] text-gold-500">Látásvizsgálat</p>
+              <h2 class="font-display text-[1.4rem] font-semibold uppercase leading-tight tracking-[0.08em] min-[400px]:text-[1.65rem] sm:text-5xl sm:tracking-[0.12em]">
+                <span class="text-ivory-100">Ingyenes</span><br />
+                <span class="text-gold-metal">látásvizsgálat</span>
+              </h2>
+              <!-- Fontos megjegyzés a kirakat alapján -->
+              <p class="mt-4 text-base tracking-[0.18em] text-ivory-300 sm:text-lg">(időpont egyeztetéssel)</p>
+              <div class="gold-rule mx-auto my-10"></div>
+
+              <!-- 3 lépés -->
+              <ol class="mx-auto grid max-w-4xl gap-8 text-left sm:grid-cols-3 sm:gap-6">
+                <li class="flex gap-4 sm:flex-col sm:items-center sm:text-center">
+                  <span class="font-display text-3xl font-semibold text-gold-metal">01</span>
+                  <div>
+                    <h3 class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-ivory-100">Hívjon minket</h3>
+                    <p class="mt-2 text-sm text-ivory-500">Egyeztessünk egy Önnek megfelelő időpontot telefonon.</p>
+                  </div>
+                </li>
+                <li class="flex gap-4 sm:flex-col sm:items-center sm:text-center">
+                  <span class="font-display text-3xl font-semibold text-gold-metal">02</span>
+                  <div>
+                    <h3 class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-ivory-100">Látásvizsgálat</h3>
+                    <p class="mt-2 text-sm text-ivory-500">Díjmentes, alapos vizsgálat optikánkban, sietség nélkül.</p>
+                  </div>
+                </li>
+                <li class="flex gap-4 sm:flex-col sm:items-center sm:text-center">
+                  <span class="font-display text-3xl font-semibold text-gold-metal">03</span>
+                  <div>
+                    <h3 class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-ivory-100">Személyes tanácsadás</h3>
+                    <p class="mt-2 text-sm text-ivory-500">Segítünk kiválasztani az Önnek legjobb lencsét és keretet.</p>
+                  </div>
+                </li>
+              </ol>
+
+              <!-- Időpontfoglalás telefonon (SZERKESZTHETŐ: telefonszámok) -->
+              <div class="mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <a href="tel:+36301738045" class="bg-gold-metal inline-flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 font-display text-sm font-semibold tracking-[0.12em] text-wood-900 shadow-[0_10px_40px_-10px_rgba(197,160,89,.55)] transition hover:brightness-110 sm:w-auto">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg>
+                  06 30/173 8045
+                </a>
+                <a href="tel:+3678888045" class="inline-flex w-full items-center justify-center gap-3 rounded-full border border-gold-500/60 px-8 py-4 font-display text-sm font-semibold tracking-[0.12em] text-gold-400 transition hover:bg-gold-500 hover:text-wood-900 sm:w-auto">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+                  06 78/888 045
+                </a>
+              </div>
+              <p class="mt-5 text-[11px] uppercase tracking-[0.12em] text-ivory-500 sm:text-xs sm:tracking-[0.2em]"><span class="whitespace-nowrap">Hétfő – Péntek 8–17</span> · <span class="whitespace-nowrap">Szombat 8–11</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SZEKCIÓ: KAPCSOLAT, NYITVATARTÁS, TÉRKÉP
+         ========================================================= -->
+    <section id="kapcsolat" class="border-t border-wood-700 bg-wood-800 py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 sm:px-8">
+
+        <div class="mx-auto mb-16 max-w-2xl text-center">
+          <p class="reveal mb-4 font-display text-[11px] font-medium uppercase tracking-[0.38em] text-gold-500">Kapcsolat</p>
+          <h2 class="reveal font-display text-3xl font-semibold uppercase tracking-[0.06em] sm:text-4xl">Látogasson el <span class="text-gold-metal">hozzánk</span></h2>
+          <div class="reveal gold-rule mx-auto mt-8"></div>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-3">
+
+          <!-- Nyitvatartás (SZERKESZTHETŐ – a JS OPENING_HOURS objektumát is frissítsd!) -->
+          <div class="reveal rounded-sm border border-wood-700 bg-wood-900/60 p-8 sm:p-10">
+            <div class="mb-8 flex items-center justify-between gap-4">
+              <h3 class="font-display text-sm font-semibold uppercase tracking-[0.22em] text-gold-400">Nyitvatartás</h3>
+              <!-- Élő státusz – JavaScript tölti ki -->
+              <span id="open-status" class="hidden shrink-0 whitespace-nowrap items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-medium uppercase tracking-wider"></span>
+            </div>
+            <table class="w-full text-[15px]">
+              <tbody class="divide-y divide-wood-700">
+                <tr data-days="1,2,3,4,5"><td class="py-3.5 text-ivory-300">Hétfő – Péntek</td><td class="py-3.5 text-right font-display font-medium tracking-wider text-ivory-100">8:00 – 17:00</td></tr>
+                <tr data-days="6"><td class="py-3.5 text-ivory-300">Szombat</td><td class="py-3.5 text-right font-display font-medium tracking-wider text-ivory-100">8:00 – 11:00</td></tr>
+                <tr data-days="0"><td class="py-3.5 text-ivory-300">Vasárnap</td><td class="py-3.5 text-right font-display font-medium tracking-wider text-ivory-500">Zárva</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-6 text-sm text-ivory-500">Látásvizsgálat előzetes időpont-egyeztetéssel.</p>
+          </div>
+
+          <!-- Elérhetőségek (SZERKESZTHETŐ) -->
+          <div class="reveal rounded-sm border border-wood-700 bg-wood-900/60 p-8 sm:p-10">
+            <h3 class="mb-8 font-display text-sm font-semibold uppercase tracking-[0.22em] text-gold-400">Elérhetőségek</h3>
+            <ul class="space-y-6 text-[15px]">
+              <li class="flex gap-4">
+                <svg class="mt-0.5 h-5 w-5 shrink-0 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                <div>
+                  <span class="block text-xs uppercase tracking-[0.18em] text-ivory-500">Cím</span>
+                  <!-- SZERKESZTHETŐ: pontos cím -->
+                  <address class="not-italic text-ivory-100">6500 Baja,<br />Déri Frigyes sétány 2/A</address>
+                  <a href="https://www.google.com/maps/dir/?api=1&destination=46.1811158,18.9533817" target="_blank" rel="noopener" class="mt-1 inline-block text-sm text-gold-400 underline-offset-4 hover:underline">Útvonaltervezés →</a>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <svg class="mt-0.5 h-5 w-5 shrink-0 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+                <div>
+                  <span class="block text-xs uppercase tracking-[0.18em] text-ivory-500">Telefon</span>
+                  <a href="tel:+3678888045" class="block font-display font-medium tracking-wider text-ivory-100 hover:text-gold-400">06 78/888 045</a>
+                  <a href="tel:+36301738045" class="block font-display font-medium tracking-wider text-ivory-100 hover:text-gold-400">06 30/173 8045</a>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <svg class="mt-0.5 h-5 w-5 shrink-0 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></svg>
+                <div>
+                  <span class="block text-xs uppercase tracking-[0.18em] text-ivory-500">E-mail</span>
+                  <a href="mailto:latszeresz.baja@gmail.com" class="break-all text-ivory-100 hover:text-gold-400">latszeresz.baja@gmail.com</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Térkép (Google Maps beágyazás koordináták alapján – API kulcs nem kell) -->
+          <div class="reveal min-h-[340px] overflow-hidden rounded-sm border border-wood-700">
+            <iframe
+              class="map-dark h-full min-h-[340px] w-full"
+              title="Látszerész Béla Miklós – térkép"
+              src="https://maps.google.com/maps?q=46.1811158,18.9533817&z=17&hl=hu&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- =========================================================
+       SZEKCIÓ: LÁBLÉC (FOOTER)
+       ========================================================= -->
+  <footer class="bg-wood-950 pt-20">
+    <div class="mx-auto max-w-7xl px-6 sm:px-8">
+      <div class="grid gap-12 border-b border-wood-700 pb-14 md:grid-cols-3">
+
+        <!-- Logó + szlogen -->
+        <div>
+          <a href="#fooldal" class="inline-flex flex-col leading-none" aria-label="Vissza az oldal tetejére">
+            <span class="font-display text-lg font-semibold tracking-logo text-gold-metal">LÁTSZERÉSZ</span>
+            <span class="mt-2 flex items-center gap-2 font-display text-[10px] font-medium tracking-wide2 text-gold-500">
+              <span class="h-px w-5 bg-gold-600"></span>BÉLA MIKLÓS<span class="h-px w-5 bg-gold-600"></span>
+            </span>
+          </a>
+          <p class="mt-6 max-w-xs text-sm text-ivory-500">Nálunk minden nap arról szól, hogy Ön jól lásson! Optika Baja belvárosában, 30 év tapasztalattal.</p>
+        </div>
+
+        <!-- Gyorslinkek -->
+        <nav aria-label="Lábléc navigáció">
+          <h4 class="mb-5 font-display text-xs font-semibold uppercase tracking-[0.22em] text-gold-400">Navigáció</h4>
+          <ul class="grid grid-cols-2 gap-3 text-sm text-ivory-300">
+            <li><a href="#rolunk" class="hover:text-gold-400">Rólunk</a></li>
+            <li><a href="#szolgaltatasok" class="hover:text-gold-400">Szolgáltatások</a></li>
+            <li><a href="#latasvizsgalat" class="hover:text-gold-400">Látásvizsgálat</a></li>
+            <li><a href="#kapcsolat" class="hover:text-gold-400">Kapcsolat</a></li>
+          </ul>
+        </nav>
+
+        <!-- Közösségi média (SZERKESZTHETŐ: a "#" helyére a valós linkek) -->
+        <div>
+          <h4 class="mb-5 font-display text-xs font-semibold uppercase tracking-[0.22em] text-gold-400">Kövessen minket</h4>
+          <div class="flex gap-3">
+            <!-- Facebook – a régi oldalon szereplő valós link -->
+            <a href="https://www.facebook.com/latszereszbelamiklos" target="_blank" rel="noopener" aria-label="Facebook" class="flex h-11 w-11 items-center justify-center rounded-full border border-wood-600 text-ivory-300 transition hover:border-gold-500 hover:text-gold-400">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5H16l.4-3H13.5V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4A21 21 0 0 0 14.3 4.3c-2.3 0-3.8 1.4-3.8 4v2.2H8v3h2.5V21h3Z"/></svg>
+            </a>
+            <!-- Instagram – HELYŐRZŐ -->
+            <a href="#" aria-label="Instagram (hamarosan)" class="flex h-11 w-11 items-center justify-center rounded-full border border-wood-600 text-ivory-300 transition hover:border-gold-500 hover:text-gold-400">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".8" fill="currentColor"/></svg>
+            </a>
+            <!-- Google értékelések – HELYŐRZŐ -->
+            <a href="#" aria-label="Google értékelések (hamarosan)" class="flex h-11 w-11 items-center justify-center rounded-full border border-wood-600 text-ivory-300 transition hover:border-gold-500 hover:text-gold-400">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"/></svg>
+            </a>
+          </div>
+          <p class="mt-6 text-sm text-ivory-500">
+            <a href="tel:+36301738045" class="hover:text-gold-400">06 30/173 8045</a> ·
+            <a href="tel:+3678888045" class="hover:text-gold-400">06 78/888 045</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Copyright sáv -->
+      <div class="flex flex-col items-center justify-between gap-3 py-8 text-xs text-ivory-500 sm:flex-row">
+        <p>© <span id="year">2026</span> Látszerész Béla Miklós. Minden jog fenntartva.</p>
+        <!-- SZERKESZTHETŐ: jogi oldalak linkjei -->
+        <p class="flex gap-5"><a href="#" class="hover:text-gold-400">Adatkezelési tájékoztató</a><a href="#" class="hover:text-gold-400">Impresszum</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lebegő hívás gomb mobilon (asztali nézetben rejtve) -->
+  <a href="tel:+36301738045" id="call-fab" class="bg-gold-metal fixed bottom-5 right-5 z-40 flex h-14 w-14 translate-y-24 items-center justify-center rounded-full text-wood-900 shadow-[0_10px_30px_-5px_rgba(0,0,0,.6)] transition-transform duration-500 lg:hidden" aria-label="Hívás: 06 30/173 8045">
+    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+  </a>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
+  <script>
+    document.documentElement.classList.add('js');
+
+    /* ---------- 1) Ragadós fejléc: háttér görgetéskor + lebegő hívás gomb ---------- */
+    const header = document.getElementById('site-header');
+    const fab = document.getElementById('call-fab');
+    const onScroll = () => {
+      const y = window.scrollY;
+      header.classList.toggle('scrolled', y > 40);
+      fab.classList.toggle('translate-y-24', y < 500); // a gomb csak a hero után jelenik meg
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ---------- 2) Mobil (hamburger) menü ---------- */
+    const toggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const setMenu = (open) => {
+      menu.classList.toggle('open', open);
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Menü bezárása' : 'Menü megnyitása');
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    toggle.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+    menu.querySelectorAll('.mobile-link').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+    window.addEventListener('resize', () => { if (window.innerWidth >= 1024) setMenu(false); });
+
+    /* ---------- 3) Smooth scroll (régebbi böngészőkhöz is, a fejléc magasságával korrigálva) ---------- */
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const id = link.getAttribute('href');
+        if (id.length < 2) return; // "#" helyőrző linkek
+        const target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.scrollY - (id === '#fooldal' ? 0 : 80);
+        window.scrollTo({ top, behavior: 'smooth' });
+        history.replaceState(null, '', id);
+      });
+    });
+
+    /* ---------- 4) Aktív menüpont kiemelése görgetés közben ---------- */
+    const navLinks = document.querySelectorAll('.nav-link');
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach((l) => {
+          const active = l.getAttribute('href') === '#' + entry.target.id;
+          l.classList.toggle('text-gold-400', active);
+          l.classList.toggle('text-ivory-300', !active);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('main section[id]').forEach((s) => spy.observe(s));
+
+    /* ---------- 5) Beúszó animációk ---------- */
+    const revealer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 80 + 'ms';
+      revealer.observe(el);
+    });
+
+    /* ---------- 6) Nyitvatartás: "Most nyitva / Zárva" jelzés (magyar idő szerint) ----------
+       SZERKESZTHETŐ: a napok sorszáma 0 = vasárnap, 1 = hétfő ... 6 = szombat.
+       Az időpontokat percben add meg (pl. 8:00 = 8*60).                                        */
+    const OPENING_HOURS = {
+      1: [8 * 60, 17 * 60], 2: [8 * 60, 17 * 60], 3: [8 * 60, 17 * 60],
+      4: [8 * 60, 17 * 60], 5: [8 * 60, 17 * 60],
+      6: [8 * 60, 11 * 60],
+      0: null, // vasárnap zárva
+    };
+    (function updateOpenStatus() {
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Budapest', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false,
+      }).formatToParts(new Date());
+      const get = (t) => parts.find((p) => p.type === t).value;
+      const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
+      const minutes = (parseInt(get('hour'), 10) % 24) * 60 + parseInt(get('minute'), 10);
+      const slot = OPENING_HOURS[day];
+      const isOpen = !!slot && minutes >= slot[0] && minutes < slot[1];
+
+      // Mai nap sorának kiemelése a táblázatban
+      document.querySelectorAll('tr[data-days]').forEach((row) => {
+        if (row.dataset.days.split(',').map(Number).includes(day)) {
+          row.querySelectorAll('td').forEach((td) => td.classList.add('!text-gold-400'));
+        }
+      });
+
+      const badge = document.getElementById('open-status');
+      badge.classList.remove('hidden');
+      badge.classList.add('inline-flex');
+      badge.innerHTML = isOpen
+        ? '<span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>Most nyitva'
+        : '<span class="h-2 w-2 rounded-full bg-ivory-500"></span>Most zárva';
+      badge.classList.add(...(isOpen ? ['border-emerald-400/40', 'text-emerald-300'] : ['border-wood-600', 'text-ivory-500']));
+    })();
+
+    /* ---------- 7) Aktuális év a láblécben ---------- */
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
